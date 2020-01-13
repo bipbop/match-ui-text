@@ -1,0 +1,29 @@
+{
+  "name": "replace-text",
+  "version": "1.0.0",
+  "description": "Finds text that matches a regular expression in the browser. Allows content to be changed with a callback function.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bipbop/replace-text.git"
+  },
+  "keywords": [
+    "ui",
+    "browser",
+    "replace",
+    "dom"
+  ],
+  "author": "lf.amorim@bipbop.com.br",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bipbop/replace-text/issues"
+  },
+  "homepage": "https://github.com/bipbop/replace-text#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "typescript": "^3.7.4"
+  }
+}
