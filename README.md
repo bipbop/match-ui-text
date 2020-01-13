@@ -1,5 +1,5 @@
-# replace-text@1.0.0
- [![npm version](https://badge.fury.io/js/replace-text.svg)](https://npmjs.org/package/replace-text)  [![minzipped size](https://img.shields.io/bundlephobia/minzip/replace-text.svg)](https://bundlephobia.com/result?p=replace-text)
+# replace-element@1.0.0
+ [![npm version](https://badge.fury.io/js/replace-element.svg)](https://npmjs.org/package/replace-element)  [![minzipped size](https://img.shields.io/bundlephobia/minzip/replace-element.svg)](https://bundlephobia.com/result?p=replace-element)
 
 Finds text that matches a regular expression in the browser. Allows content to be changed with a callback function.
 
@@ -7,7 +7,7 @@ Finds text that matches a regular expression in the browser. Allows content to b
 Download node at [nodejs.org](http://nodejs.org) and install it, if you haven't already.
 
 ```sh
-npm install replace-text --save
+npm install replace-element --save
 ```
 
 This package is provided in these module formats:
@@ -17,11 +17,11 @@ This package is provided in these module formats:
 ## TL-DR ##
 
 ```js
-const { replaceText } = require('../dist/index');
+const { replaceElement } = require('../dist/index');
 const { cpf, cnpj } = require('cpf-cnpj-validator');
 
 const CpfCnpjRegex = /(\d{3}\.\d{3}\.\d{3}\-\d{2})|(\d{2}\.\d{3}\.\d{3}\/\d{4}\-\d{2})/g;
-replaceText(CpfCnpjRegex, (payload, element) => {
+replaceElement(CpfCnpjRegex, (payload, element) => {
     /* callback */
     element.style.color = "red";
     element.style.fontWeight = "bold";

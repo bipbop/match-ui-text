@@ -5,9 +5,9 @@ function deepUiText(useTag, excludeElements, child, regex, callback, validate) {
     if (useTag === void 0) { useTag = exports.ReplaceElement; }
     if (excludeElements.indexOf(child.tagName.toLowerCase()) !== -1)
         return;
-    replaceText(regex, callback, validate, child, useTag, excludeElements);
+    replaceElement(regex, callback, validate, child, useTag, excludeElements);
 }
-function replaceTextWithNode(textChild, regex, callback, validate) {
+function replaceElementWithNode(textChild, regex, callback, validate) {
     var match;
     while ((match = regex.exec(textChild.data)) !== null) {
         if (textChild.parentElement == null)
@@ -29,7 +29,7 @@ function replaceTextWithNode(textChild, regex, callback, validate) {
     regex.lastIndex = 0;
     return textChild;
 }
-function replaceText(regex, callback, validate, node, useTag, excludeElements) {
+function replaceElement(regex, callback, validate, node, useTag, excludeElements) {
     if (node === void 0) { node = document.body; }
     if (useTag === void 0) { useTag = exports.ReplaceElement; }
     if (excludeElements === void 0) { excludeElements = [
@@ -48,13 +48,13 @@ function replaceText(regex, callback, validate, node, useTag, excludeElements) {
                 deepUiText(useTag, excludeElements, child, regex, callback, validate);
                 break;
             case Node.TEXT_NODE:
-                replaceTextWithNode(child, regex, callback, validate);
+                replaceElementWithNode(child, regex, callback, validate);
                 break;
         }
         child = child.nextSibling;
     }
     return node;
 }
-exports.replaceText = replaceText;
-exports.default = replaceText;
+exports.replaceElement = replaceElement;
+exports.default = replaceElement;
 //# sourceMappingURL=index.js.map

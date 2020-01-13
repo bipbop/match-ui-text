@@ -1,69 +1,73 @@
-type Callback = (payload: string, node: HTMLElement) => void;
+type Callback = (payload: string, node?: HTMLElement) => HTMLElement | undefined;
 type Validator = (payload: string, target: Text, match: RegExpExecArray) => boolean;
 
-export const ReplaceElement = "x-replace-ui";
+export const EncapsulationElement = "x-replace-ui";
 
-function deepUiText(
-    useTag: string = ReplaceElement,
+function tagDeepening(
+    useTag: string = EncapsulationElement,
     excludeElements: string[],
     child: HTMLElement,
     regex: RegExp,
     callback: Callback,
-    validate?: Validator
+    validate?: Validator,
 ) {
-    if (excludeElements.indexOf(child.tagName.toLowerCase()) !== -1) return;
-    replaceText(regex, callback, validate, child, useTag, excludeElements);
+    if (excludeElements.indexOf(child.tagName.toLowerCase()) !== -1) {
+        return;
+    }
+    replaceElement(regex, callback, validate, child, useTag, excludeElements);
 }
 
-function replaceTextWithNode(textChild: Text, regex: RegExp, callback: Callback, validate?: Validator) {
-    var match: RegExpExecArray | null;
-    while ((match = regex.exec(textChild.data)) !== null) {
-        if (textChild.parentElement == null) continue;
+function replaceTextElement(textChild: Text, regex: RegExp, callback: Callback, validate?: Validator) {
+    let match: RegExpExecArray | null;
+    while (true) {
+        match = regex.exec(textChild.data);
+        if (match === null) { break; }
+        if (textChild.parentElement === null) { continue; }
 
-        let [ payload ] = match;
-        if (typeof validate !== "undefined" && !validate(payload, textChild, match as RegExpExecArray)) return;
-        var messageBegin = textChild.data.substr(0, match.index);
-        var messageEnd = textChild.data.substr(match.index + payload.length);
-        var newElement = document.createElement(ReplaceElement);
+        const [ payload ] = match;
+        if (typeof validate !== "undefined" && !validate(payload, textChild, match as RegExpExecArray)) { return; }
+        const messageBegin = textChild.data.substr(0, match.index);
+        const messageEnd = textChild.data.substr(match.index + payload.length);
+        const newElement = document.createElement(EncapsulationElement);
 
         /* message begin */
         textChild.data = messageBegin;
 
         /* payload */
-        newElement.innerText = payload;
         textChild.parentElement.append(newElement);
         textChild.parentElement.append(new Text(messageEnd));
 
-        callback(payload, newElement);
+        const callbackNode = callback(payload, newElement);
+        if (callbackNode) { newElement.append(callbackNode); } else { newElement.innerText = payload; }
     }
     regex.lastIndex = 0;
     return textChild;
 }
 
-export function replaceText(
+export function replaceElement(
     regex: RegExp,
     callback: Callback,
     validate?: Validator,
     node: Node = document.body,
-    useTag: string = ReplaceElement,
+    useTag: string = EncapsulationElement,
     excludeElements: string[] = [
-        'script',
-        'style',
-        'iframe',
-        'canvas',
-        'button',
-        'textarea',
-        useTag
-    ]
+        "script",
+        "style",
+        "iframe",
+        "canvas",
+        "button",
+        "textarea",
+        useTag,
+    ],
 ) {
     let child = node.firstChild;
     while (child) {
         switch (child.nodeType) {
             case Node.ELEMENT_NODE:
-                deepUiText(useTag, excludeElements, child as HTMLElement, regex, callback, validate);
+                tagDeepening(useTag, excludeElements, child as HTMLElement, regex, callback, validate);
                 break;
             case Node.TEXT_NODE:
-                replaceTextWithNode(child as Text, regex, callback, validate);
+                replaceTextElement(child as Text, regex, callback, validate);
                 break;
         }
         child = child.nextSibling;
@@ -72,4 +76,4 @@ export function replaceText(
     return node;
 }
 
-export default replaceText;
+export default replaceElement;
