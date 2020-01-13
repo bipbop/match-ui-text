@@ -1,12 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var customTag = "x-replace-ui";
-function deepUiText(excludeElements, child, regex, callback, validate) {
-    if (excludeElements.includes(child.tagName.toLowerCase()))
+exports.ReplaceElement = "x-replace-ui";
+function deepUiText(useTag, excludeElements, child, regex, callback, validate) {
+    if (useTag === void 0) { useTag = exports.ReplaceElement; }
+    if (excludeElements.indexOf(child.tagName.toLowerCase()) !== -1)
         return;
-    replaceDocumentText(regex, callback, validate, child, excludeElements);
+    replaceText(regex, callback, validate, child, useTag, excludeElements);
 }
-function replaceText(textChild, regex, callback, validate) {
+function replaceTextWithNode(textChild, regex, callback, validate) {
     var match;
     while ((match = regex.exec(textChild.data)) !== null) {
         if (textChild.parentElement == null)
@@ -16,34 +17,44 @@ function replaceText(textChild, regex, callback, validate) {
             return;
         var messageBegin = textChild.data.substr(0, match.index);
         var messageEnd = textChild.data.substr(match.index + payload.length);
-        var newElement = document.createElement(customTag);
+        var newElement = document.createElement(exports.ReplaceElement);
         /* message begin */
         textChild.data = messageBegin;
         /* payload */
         newElement.innerText = payload;
         textChild.parentElement.append(newElement);
         textChild.parentElement.append(new Text(messageEnd));
-        callback(newElement, payload);
+        callback(payload, newElement);
     }
     regex.lastIndex = 0;
     return textChild;
 }
-function replaceDocumentText(regex, callback, validate, node, excludeElements) {
+function replaceText(regex, callback, validate, node, useTag, excludeElements) {
     if (node === void 0) { node = document.body; }
-    if (excludeElements === void 0) { excludeElements = ['script', 'style', 'iframe', 'canvas', customTag]; }
+    if (useTag === void 0) { useTag = exports.ReplaceElement; }
+    if (excludeElements === void 0) { excludeElements = [
+        'script',
+        'style',
+        'iframe',
+        'canvas',
+        'button',
+        'textarea',
+        useTag
+    ]; }
     var child = node.firstChild;
     while (child) {
         switch (child.nodeType) {
             case Node.ELEMENT_NODE:
-                deepUiText(excludeElements, child, regex, callback, validate);
+                deepUiText(useTag, excludeElements, child, regex, callback, validate);
                 break;
             case Node.TEXT_NODE:
-                replaceText(child, regex, callback, validate);
+                replaceTextWithNode(child, regex, callback, validate);
                 break;
         }
         child = child.nextSibling;
     }
     return node;
 }
-exports.default = replaceDocumentText;
+exports.replaceText = replaceText;
+exports.default = replaceText;
 //# sourceMappingURL=index.js.map

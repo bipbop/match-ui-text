@@ -4,7 +4,8 @@
   "description": "Finds text that matches a regular expression in the browser. Allows content to be changed with a callback function.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -24,6 +25,7 @@
   "homepage": "https://github.com/bipbop/replace-text#readme",
   "dependencies": {},
   "devDependencies": {
+    "jest": "^24.9.0",
     "typescript": "^3.7.4"
   }
 }
