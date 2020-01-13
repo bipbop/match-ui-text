@@ -1,4 +1,4 @@
-const { replaceElement, ReplaceElement } = require('../dist/index');
+const { EncapsulationElement, replaceElement } = require('../dist/index');
 
 
 const regex = /Lucas/;
@@ -9,6 +9,6 @@ test('replace content', () => {
         expect(payload).toMatch(regex);
         expect(element).toBeInstanceOf(HTMLElement);
     });
-    expect(document.getElementsByTagName(ReplaceElement).length).toBe(1);
-    expect(document.getElementsByTagName(ReplaceElement)[0].innerText).toBe('Lucas');
+    expect(document.getElementsByTagName(EncapsulationElement).length).toBe(1);
+    expect(document.getElementsByTagName(EncapsulationElement)[0].innerText).toBe('Lucas');
 });

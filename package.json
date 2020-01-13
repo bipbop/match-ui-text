@@ -1,6 +1,6 @@
 {
   "name": "replace-element",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Finds text that matches a regular expression in the browser. Allows content to be changed with a callback function.",
   "main": "index.js",
   "scripts": {
