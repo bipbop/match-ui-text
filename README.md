@@ -1,4 +1,4 @@
-# replace-element@1.0.2
+# replace-element@1.0.3
  [![npm version](https://badge.fury.io/js/replace-element.svg)](https://npmjs.org/package/replace-element)  [![minzipped size](https://img.shields.io/bundlephobia/minzip/replace-element.svg)](https://bundlephobia.com/result?p=replace-element)
 
 Finds text that matches a regular expression in the browser. Allows content to be changed with a callback function.
