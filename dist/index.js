@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.replaceElement = exports.EncapsulationElement = void 0;
 exports.EncapsulationElement = "x-replace-ui";
 function tagDeepening(useTag, excludeElements, child, regex, callback, validate) {
     if (useTag === void 0) { useTag = exports.EncapsulationElement; }
