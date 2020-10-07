@@ -1,10 +1,10 @@
 type Callback = (payload: string, node: HTMLElement) => HTMLElement | void;
 type Validator = (payload: string, target: Text, match: RegExpExecArray) => boolean;
 
-export const EncapsulationElement = "x-replace-ui";
+export const DEFAULT_ELEMENT = "x-replace-ui";
 
 function tagDeepening(
-    useTag: string = EncapsulationElement,
+    useTag: string = DEFAULT_ELEMENT,
     excludeElements: string[],
     child: HTMLElement,
     regex: RegExp,
@@ -17,18 +17,24 @@ function tagDeepening(
     replaceElement(regex, callback, validate, child, useTag, excludeElements);
 }
 
-function replaceTextElement(textChild: Text, regex: RegExp, callback: Callback, validate?: Validator) {
+function replaceTextElement(
+  useTag: string = DEFAULT_ELEMENT,
+  textChild: Text,
+  regex: RegExp,
+  callback: Callback,
+  validate?: Validator
+) {
     let match: RegExpExecArray | null;
     while (true) {
         match = regex.exec(textChild.data);
         if (match === null) { break; }
         if (textChild.parentElement === null) { continue; }
+        debugger;
 
         const [ payload ] = match;
-        if (typeof validate !== "undefined" && !validate(payload, textChild, match as RegExpExecArray)) { return; }
         const messageBegin = textChild.data.substr(0, match.index);
         const messageEnd = textChild.data.substr(match.index + payload.length);
-        const newElement = document.createElement(EncapsulationElement);
+        const newElement = document.createElement(useTag);
 
         /* message begin */
         textChild.data = messageBegin;
@@ -36,6 +42,11 @@ function replaceTextElement(textChild: Text, regex: RegExp, callback: Callback, 
         /* payload */
         textChild.parentElement.append(newElement);
         textChild.parentElement.append(new Text(messageEnd));
+
+        if (typeof validate !== "undefined" && !validate(payload, textChild, match as RegExpExecArray)) {
+          newElement.innerText = payload
+          return;
+        }
 
         const callbackNode = callback(payload, newElement);
         if (callbackNode) { newElement.append(callbackNode); } else { newElement.innerText = payload; }
@@ -49,7 +60,7 @@ export function replaceElement(
     callback: Callback,
     validate?: Validator,
     node: Node = document.body,
-    useTag: string = EncapsulationElement,
+    useTag: string = DEFAULT_ELEMENT,
     excludeElements: string[] = [
         "script",
         "style",
@@ -67,7 +78,7 @@ export function replaceElement(
                 tagDeepening(useTag, excludeElements, child as HTMLElement, regex, callback, validate);
                 break;
             case Node.TEXT_NODE:
-                replaceTextElement(child as Text, regex, callback, validate);
+                replaceTextElement(useTag, child as Text, regex, callback, validate);
                 break;
         }
         child = child.nextSibling;
@@ -75,5 +86,3 @@ export function replaceElement(
 
     return node;
 }
-
-export default replaceElement;
