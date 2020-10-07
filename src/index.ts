@@ -29,7 +29,6 @@ function replaceTextElement(
         match = regex.exec(textChild.data);
         if (match === null) { break; }
         if (textChild.parentElement === null) { continue; }
-        debugger;
 
         const [ payload ] = match;
         const messageBegin = textChild.data.substr(0, match.index);
@@ -86,3 +85,5 @@ export function replaceElement(
 
     return node;
 }
+
+export default replaceElement

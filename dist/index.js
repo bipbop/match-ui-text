@@ -20,7 +20,6 @@ function replaceTextElement(useTag, textChild, regex, callback, validate) {
         if (textChild.parentElement === null) {
             continue;
         }
-        debugger;
         var payload = match[0];
         var messageBegin = textChild.data.substr(0, match.index);
         var messageEnd = textChild.data.substr(match.index + payload.length);
@@ -72,4 +71,5 @@ function replaceElement(regex, callback, validate, node, useTag, excludeElements
     return node;
 }
 exports.replaceElement = replaceElement;
+exports.default = replaceElement;
 //# sourceMappingURL=index.js.map
