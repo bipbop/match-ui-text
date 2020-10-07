@@ -34,12 +34,13 @@ function replaceTextElement(useTag, textChild, regex, callback, validate) {
             return;
         }
         var callbackNode = callback(payload, newElement);
+        if (callbackNode === false)
+            return;
         if (callbackNode) {
             newElement.append(callbackNode);
+            return;
         }
-        else {
-            newElement.innerText = payload;
-        }
+        newElement.innerText = payload;
     }
     regex.lastIndex = 0;
     return textChild;

@@ -1,4 +1,4 @@
-type Callback = (payload: string, node: HTMLElement) => HTMLElement | void;
+type Callback = (payload: string, node: HTMLElement) => HTMLElement | void | false;
 type Validator = (payload: string, target: Text, match: RegExpExecArray) => boolean;
 
 export const DEFAULT_ELEMENT = "x-replace-ui";
@@ -48,7 +48,13 @@ function replaceTextElement(
         }
 
         const callbackNode = callback(payload, newElement);
-        if (callbackNode) { newElement.append(callbackNode); } else { newElement.innerText = payload; }
+        if (callbackNode === false) return;
+        if (callbackNode) {
+            newElement.append(callbackNode);
+            return
+        }
+        
+        newElement.innerText = payload;
     }
     regex.lastIndex = 0;
     return textChild;
