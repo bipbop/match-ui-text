@@ -1,4 +1,4 @@
-type Callback = (payload: string, node?: HTMLElement) => HTMLElement | undefined;
+type Callback = (payload: string, node: HTMLElement) => HTMLElement | void;
 type Validator = (payload: string, target: Text, match: RegExpExecArray) => boolean;
 
 export const EncapsulationElement = "x-replace-ui";
