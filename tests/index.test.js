@@ -1,7 +1,14 @@
-const { EncapsulationElement, replaceElement } = require('../dist/index');
+/**
+ * @jest-environment jsdom
+ */
 
+const {
+    DEFAULT_ELEMENT: EncapsulationElement,
+    replaceElement
+} = require('../dist/index');
 
 const regex = /Lucas/;
+
 
 test('replace content', () => {
     document.body.innerHTML = '<div>Olá, meu nome é Lucas</div>';

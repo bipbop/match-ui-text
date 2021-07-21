@@ -14,6 +14,12 @@ function tagDeepening(
     if (excludeElements.indexOf(child.tagName.toLowerCase()) !== -1) {
         return;
     }
+
+    for (let pElement = child.parentElement; pElement !== null; pElement = pElement!.parentElement) {
+        if (excludeElements.indexOf(pElement.tagName.toLowerCase()) === -1) continue;
+        return;
+    }
+
     replaceElement(regex, callback, validate, child, useTag, excludeElements);
 }
 
